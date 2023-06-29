@@ -35,6 +35,17 @@ answer = amjad_chat_bot.query("Why is it important to have a good life story?")
 print(answer)
 ```
 
+## Supported ingestion formats and type
+
+- Website Crawler URL -> "website-crawler"
+- Docusaurus site URL -> "docusaurus"
+- GitHub Repo URL -> "github"
+- YouTube Video URL -> "youtube"
+- Single Website URL -> "url"
+- Sitemap URL -> "sitemap"
+- OpenAPI YAML URL -> "openapi"
+
+
 ## License
 
 This project is licensed under the terms of the MIT license.
