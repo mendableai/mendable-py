@@ -63,4 +63,3 @@ class ChatApp:
             return response['answer']['text']
         else:
             raise Exception('Failed to send the question or receive an answer')
-
