@@ -12,13 +12,20 @@ pip install mendable-py
 
 ## Prerequisites
 
-To use this package, you'll need to obtain an API key from Mendable.ai and make it available as an environment variable.
+To use this package, you'll need to obtain an API key from Mendable.ai and make it available as an environment variable or set it in the constructor.
 
 In your environment (add to .env file):
 
 ```bash
 MENDABLE_API_KEY=your_api_key
 ```
+
+OR
+
+```python
+my_chat_bot = ChatApp(api_key="your-api-key")
+```
+
 
 ## Usage
 
@@ -27,11 +34,11 @@ You can use this package to add sources to Mendable and ask questions to it:
 ```python
 from mendable import ChatApp
 
-amjad_chat_bot = ChatApp()
+my_chat_bot = ChatApp(api_key="your-api-key")
 
-amjad_chat_bot.add("url", "https://amasad.me/story")
+my_chat_bot.add("url", "https://www.mendable.ai/")
 
-answer = amjad_chat_bot.query("Why is it important to have a good life story?")
+answer = my_chat_bot.query("What is Mendable?")
 print(answer)
 ```
 
