@@ -7,6 +7,8 @@ class ChatApp:
         self.api_key = api_key or os.getenv('MENDABLE_API_KEY')
         if self.api_key is None:
             raise ValueError('No API key provided')
+        self.conversation_id = self._get_new_conversation_id()
+        self.history = []
 
     def _get_new_conversation_id(self):
         new_conversation_response = requests.post("https://api.mendable.ai/v0/newConversation", json={"api_key": self.api_key}).json()
