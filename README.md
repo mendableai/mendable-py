@@ -42,6 +42,23 @@ answer = my_chat_bot.query("What is Mendable?")
 print(answer)
 ```
 
+## Check and Delete Indexes
+
+You can also check/delete indexes using `get_sources` and `delete_source` functions:
+
+```python
+from mendable import ChatApp
+
+my_chat_bot = ChatApp(api_key="your-api-key")
+
+my_chat_bot.add("url", "https://www.mendable.ai/")
+
+my_chat_bot.get_sources()
+
+my_chat_bot.delete_source("https://www.mendable.ai/")
+```
+
+
 ## Supported ingestion formats and type
 
 - Website Crawler URL -> "website-crawler"
