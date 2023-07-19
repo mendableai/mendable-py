@@ -9,6 +9,22 @@ class ChatApp:
             raise ValueError('No API key provided')
         self.conversation_id = self._get_new_conversation_id()
         self.history = []
+        
+    def get_sources(self):
+        response = requests.post("https://api.mendable.ai/v0/getSources", json={"api_key": self.api_key}).json()
+        if response:
+            return response
+        else:
+            raise Exception('Failed to get sources')
+
+    def delete_source(self, source=None, delete_all=False):
+        if not source and not delete_all:
+            raise ValueError('Either a source or delete_all must be provided')
+        response = requests.post("https://api.mendable.ai/v0/deleteSource", json={"api_key": self.api_key, "source": source, "delete_all": delete_all})
+        if response:
+            return response
+        else:
+            raise Exception('Failed to delete source(s)')
 
     def _get_new_conversation_id(self):
         new_conversation_response = requests.post("https://api.mendable.ai/v0/newConversation", json={"api_key": self.api_key}).json()
@@ -32,7 +48,20 @@ class ChatApp:
 
 
     def _start_ingestion(self, _type, url):
-        response = requests.post("https://api.mendable.ai/v0/ingestData", json={"api_key": self.api_key, "url": url, "type": _type}).json()
+        # this response can return a 400 error and i want to handle it
+        try:
+            response = requests.post("https://api.mendable.ai/v0/ingestData", json={"api_key": self.api_key, "url": url, "type": _type})
+            # Raise an exception if the request was not successful
+            response.raise_for_status()
+
+        except requests.exceptions.HTTPError as err:
+            # Check for 400 status code
+            if response.status_code == 400:
+                print("\n"+response.text+"\n")
+            else:
+                print('An error occurred: ', err)
+            raise Exception('Failed to start data ingestion') 
+        response = response.json()
         if response.get('task_id'):
             return response['task_id']
         else:
