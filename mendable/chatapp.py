@@ -7,7 +7,7 @@ class ChatApp:
         self.api_key = api_key or os.getenv('MENDABLE_API_KEY')
         if self.api_key is None:
             raise ValueError('No API key provided')
-        self.conversation_id = self._get_new_conversation_id()
+        self.conversation_id = self.start_new_conversation()
         self.history = []
         
     def get_sources(self):
@@ -26,7 +26,7 @@ class ChatApp:
         else:
             raise Exception('Failed to delete source(s)')
 
-    def _get_new_conversation_id(self):
+    def start_new_conversation(self):
         new_conversation_response = requests.post("https://api.mendable.ai/v0/newConversation", json={"api_key": self.api_key}).json()
         if new_conversation_response.get('conversation_id'):
             return new_conversation_response['conversation_id']
@@ -79,14 +79,14 @@ class ChatApp:
                 raise Exception('Unknown ingestion status')
         else:
             raise Exception('Failed to check ingestion status')
+        
 
-
-
-    def query(self, question):
+    # Being depricated soon in favor of the new ask() method
+    def query(self, question, history=[]):
         response = requests.post("https://api.mendable.ai/v0/mendableChat", json={
             "api_key": self.api_key,
             "question": question,
-            "history": self.history,
+            "history": history,
             "conversation_id": self.conversation_id,
             "shouldStream": False
         }).json()
@@ -94,3 +94,32 @@ class ChatApp:
             return response['answer']['text']
         else:
             raise Exception('Failed to send the question or receive an answer')
+        
+    def ask(self, question, history=[]):
+        response = requests.post("https://api.mendable.ai/v0/mendableChat", json={
+            "api_key": self.api_key,
+            "question": question,
+            "history": history,
+            "conversation_id": self.conversation_id,
+            "shouldStream": False
+        }).json()
+        if response.get('answer') and response['answer'].get('text'):
+            return response
+        else:
+            raise Exception('Failed to send the question or receive an answer')
+    
+    def rate_message(self, message_id, message_rating):
+        response = requests.post("https://api.mendable.ai/v0/rateMessage", json={
+            "api_key": self.api_key,
+            "message_id": message_id,
+            "rating_value": message_rating
+        }).json()
+        
+        # Check if the response status code is 200 (HTTP OK)
+        if response.status_code == 200:
+            return response.text
+        else:
+            raise Exception(f'Failed to rate the message. Status code: {response.status_code}, Response: {response.text}')
+
+    
+    
