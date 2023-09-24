@@ -133,7 +133,18 @@ my_chat_bot.delete_source("https://www.mendable.ai/")
 - Sitemap URL -> "sitemap"
 - OpenAPI YAML URL -> "openapi"
 
+## Start new conversation
 
+This method makes a new conversation for a given project
+
+```python
+from mendable import ChatApp
+
+my_chat_bot = ChatApp(api_key="your-api-key")
+
+my_chat_bot.start_new_conversation()
+
+```
 
 
 ## License
