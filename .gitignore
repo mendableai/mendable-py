@@ -5,3 +5,5 @@
 build/
 dist/
 *.egg-info/
+main.ipynb
+__pycache__/

@@ -109,17 +109,22 @@ class ChatApp:
             raise Exception('Failed to send the question or receive an answer')
     
     def rate_message(self, message_id, message_rating):
+        
         response = requests.post("https://api.mendable.ai/v0/rateMessage", json={
             "api_key": self.api_key,
-            "message_id": message_id,
+            "message_id": int(message_id),
             "rating_value": message_rating
-        }).json()
-        
-        # Check if the response status code is 200 (HTTP OK)
+        })
+
+        if not response.content:
+            raise Exception('No content received from the server')
+
         if response.status_code == 200:
-            return response.text
+            return "Message Rated"  # Attempt to parse JSON
         else:
-            raise Exception(f'Failed to rate the message. Status code: {response.status_code}, Response: {response.text}')
+            raise Exception(f'Failed to send the question or receive an answer. Status code: {response.status_code}')
+
+
 
     
     
