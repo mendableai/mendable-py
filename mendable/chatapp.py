@@ -77,7 +77,7 @@ class ChatApp:
             raise Exception('Failed to check ingestion status')
         
 
-    # Being depricated soon in favor of the new ask() method
+    # Being depricated in favor of the new ask() method
     def query(self, question, history=[]):
         response = requests.post("https://api.mendable.ai/v0/mendableChat", json={
             "api_key": self.api_key,
