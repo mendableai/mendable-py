@@ -72,11 +72,7 @@ class ChatApp:
         response = requests.post("https://api.mendable.ai/v0/ingestionStatus", json={"task_id": task_id, "api_key": self.api_key}).json()
         status = response.get('status')
         if status:
-            if status in ['completed', 'queued', 'processing', 'pending']:
-                return status
-            else:
-                print(f'Unexpected ingestion status: {status}')
-                raise Exception('Unknown ingestion status')
+            return status
         else:
             raise Exception('Failed to check ingestion status')
         
